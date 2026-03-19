@@ -42,7 +42,6 @@ def analyze_and_extract_errors(log_path, error_path):
                         error_file.write(line + '\n')
                         break  # 중복 기록 방지
                         
-        # 문자열 내에 작은따옴표를 출력하기 위해 큰따옴표 사용
         print(f"\n문제가 되는 로그 데이터만 '{error_path}' 저장")
         
     # 예외 처리
@@ -54,9 +53,7 @@ def analyze_and_extract_errors(log_path, error_path):
         print(f'파일 처리 중 알 수 없는 예외 발생: {e}')
 
 if __name__ == '__main__':
-    # 입력 파일과 출력 파일 이름 지정
     target_log = 'mission_computer_main.log'
     error_output = 'error_logs.txt'
     
-    # 함수 실행
     analyze_and_extract_errors(target_log, error_output)
