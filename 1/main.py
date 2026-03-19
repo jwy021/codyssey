@@ -56,4 +56,5 @@ if __name__ == '__main__':
     target_log = 'mission_computer_main.log'
     error_output = 'error_logs.txt'
     
+    print('Hello Mars')
     analyze_and_extract_errors(target_log, error_output)
