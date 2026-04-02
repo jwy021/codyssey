@@ -1,3 +1,4 @@
 datetime,internal_temperature,external_temperature,internal_humidity,external_illuminance,internal_co2,internal_oxygen
 2026-03-27 19:54:48,25.55,6.41,50.66,649.6,0.0633,6.47
 2026-03-27 19:58:35,21.5,8.05,57.6,700.04,0.058,5.74
+2026-04-02 19:30:40,24.16,19.9,51.22,649.0,0.0539,5.13
