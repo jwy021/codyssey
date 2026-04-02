@@ -16,7 +16,6 @@ class DummySensor:
 
     def set_env(self):
         # 딕셔너리를 순회하면서 설정된 min, max 값을 읽어 자동으로 랜덤 값을 생성 및 할당
-        # 이전에 하나씩 하드코딩했던 코드가 단 3줄로 압축됩니다!
         for sensor_key, meta in self.env_data.items():
             random_val = random.uniform(meta['min'], meta['max'])
             meta['value'] = round(random_val, meta['round'])
