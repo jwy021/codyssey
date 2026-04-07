@@ -1,0 +1,168 @@
+[시스템 안내] 화성 기지 미션 컴퓨터 가동을 시작합니다. (종료: Ctrl+C)
+
+--- 측정 시간: 2026-04-07 19:33:21 ---
+{
+    "mars_base_internal_temperature": 22.88,
+    "mars_base_external_temperature": 17.63,
+    "mars_base_internal_humidity": 51.8,
+    "mars_base_external_illuminance": 518.85,
+    "mars_base_internal_co2": 0.0258,
+    "mars_base_internal_oxygen": 5.99
+}
+---------------------------------------------
+--- 측정 시간: 2026-04-07 19:33:26 ---
+{
+    "mars_base_internal_temperature": 22.38,
+    "mars_base_external_temperature": 17.9,
+    "mars_base_internal_humidity": 57.2,
+    "mars_base_external_illuminance": 694.63,
+    "mars_base_internal_co2": 0.0623,
+    "mars_base_internal_oxygen": 5.6
+}
+---------------------------------------------
+--- 측정 시간: 2026-04-07 19:33:31 ---
+{
+    "mars_base_internal_temperature": 28.62,
+    "mars_base_external_temperature": 18.79,
+    "mars_base_internal_humidity": 51.22,
+    "mars_base_external_illuminance": 572.81,
+    "mars_base_internal_co2": 0.0738,
+    "mars_base_internal_oxygen": 6.11
+}
+---------------------------------------------
+--- 측정 시간: 2026-04-07 19:33:36 ---
+{
+    "mars_base_internal_temperature": 20.97,
+    "mars_base_external_temperature": 16.28,
+    "mars_base_internal_humidity": 53.96,
+    "mars_base_external_illuminance": 615.01,
+    "mars_base_internal_co2": 0.0296,
+    "mars_base_internal_oxygen": 5.73
+}
+---------------------------------------------
+--- 측정 시간: 2026-04-07 19:33:41 ---
+{
+    "mars_base_internal_temperature": 20.66,
+    "mars_base_external_temperature": 0.37,
+    "mars_base_internal_humidity": 52.07,
+    "mars_base_external_illuminance": 675.59,
+    "mars_base_internal_co2": 0.0492,
+    "mars_base_internal_oxygen": 5.56
+}
+---------------------------------------------
+--- 측정 시간: 2026-04-07 19:33:46 ---
+{
+    "mars_base_internal_temperature": 20.61,
+    "mars_base_external_temperature": 15.55,
+    "mars_base_internal_humidity": 53.2,
+    "mars_base_external_illuminance": 566.49,
+    "mars_base_internal_co2": 0.0996,
+    "mars_base_internal_oxygen": 6.41
+}
+---------------------------------------------
+--- 측정 시간: 2026-04-07 19:33:51 ---
+{
+    "mars_base_internal_temperature": 22.83,
+    "mars_base_external_temperature": 16.82,
+    "mars_base_internal_humidity": 52.89,
+    "mars_base_external_illuminance": 645.03,
+    "mars_base_internal_co2": 0.06,
+    "mars_base_internal_oxygen": 6.1
+}
+---------------------------------------------
+--- 측정 시간: 2026-04-07 19:33:56 ---
+{
+    "mars_base_internal_temperature": 22.71,
+    "mars_base_external_temperature": 11.95,
+    "mars_base_internal_humidity": 50.69,
+    "mars_base_external_illuminance": 706.22,
+    "mars_base_internal_co2": 0.0794,
+    "mars_base_internal_oxygen": 6.3
+}
+---------------------------------------------
+--- 측정 시간: 2026-04-07 19:34:01 ---
+{
+    "mars_base_internal_temperature": 26.75,
+    "mars_base_external_temperature": 20.68,
+    "mars_base_internal_humidity": 52.64,
+    "mars_base_external_illuminance": 618.13,
+    "mars_base_internal_co2": 0.0634,
+    "mars_base_internal_oxygen": 6.83
+}
+---------------------------------------------
+--- 측정 시간: 2026-04-07 19:34:06 ---
+{
+    "mars_base_internal_temperature": 18.51,
+    "mars_base_external_temperature": 10.88,
+    "mars_base_internal_humidity": 52.68,
+    "mars_base_external_illuminance": 626.85,
+    "mars_base_internal_co2": 0.0405,
+    "mars_base_internal_oxygen": 5.14
+}
+---------------------------------------------
+--- 측정 시간: 2026-04-07 19:34:11 ---
+{
+    "mars_base_internal_temperature": 27.37,
+    "mars_base_external_temperature": 16.36,
+    "mars_base_internal_humidity": 51.49,
+    "mars_base_external_illuminance": 711.94,
+    "mars_base_internal_co2": 0.024,
+    "mars_base_internal_oxygen": 6.33
+}
+---------------------------------------------
+--- 측정 시간: 2026-04-07 19:34:16 ---
+{
+    "mars_base_internal_temperature": 24.8,
+    "mars_base_external_temperature": 18.35,
+    "mars_base_internal_humidity": 55.34,
+    "mars_base_external_illuminance": 518.58,
+    "mars_base_internal_co2": 0.0702,
+    "mars_base_internal_oxygen": 5.09
+}
+---------------------------------------------
+--- 측정 시간: 2026-04-07 19:34:21 ---
+{
+    "mars_base_internal_temperature": 27.87,
+    "mars_base_external_temperature": 18.35,
+    "mars_base_internal_humidity": 52.36,
+    "mars_base_external_illuminance": 612.53,
+    "mars_base_internal_co2": 0.0879,
+    "mars_base_internal_oxygen": 6.01
+}
+---------------------------------------------
+
+==================== 5분 평균 리포트 ====================
+{
+    "mars_base_internal_temperature": 23.61,
+    "mars_base_external_temperature": 15.38,
+    "mars_base_internal_humidity": 52.89,
+    "mars_base_external_illuminance": 621.74,
+    "mars_base_internal_co2": 0.0589,
+    "mars_base_internal_oxygen": 5.94
+}
+======================================================
+
+--- 측정 시간: 2026-04-07 19:34:26 ---
+{
+    "mars_base_internal_temperature": 27.21,
+    "mars_base_external_temperature": 0.75,
+    "mars_base_internal_humidity": 50.91,
+    "mars_base_external_illuminance": 712.45,
+    "mars_base_internal_co2": 0.0814,
+    "mars_base_internal_oxygen": 4.53
+}
+---------------------------------------------
+--- 측정 시간: 2026-04-07 19:34:31 ---
+{
+    "mars_base_internal_temperature": 18.76,
+    "mars_base_external_temperature": 11.06,
+    "mars_base_internal_humidity": 50.44,
+    "mars_base_external_illuminance": 655.32,
+    "mars_base_internal_co2": 0.0593,
+    "mars_base_internal_oxygen": 6.32
+}
+---------------------------------------------
+
+------------------------------
+System stopped....
+------------------------------
