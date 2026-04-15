@@ -1,0 +1,13 @@
+mars_base_internal_temperature=True
+mars_base_external_temperature=True
+mars_base_internal_humidity=True
+mars_base_external_illuminance=True
+mars_base_internal_co2=True
+mars_base_internal_oxygen=True
+info_os_system=True
+info_os_version=True
+info_cpu_type=True
+info_cpu_cores=True
+info_memory_total=True
+load_cpu_usage=True
+load_mem_usage=True
