@@ -6,6 +6,10 @@ from PyQt5.QtCore import Qt
 class Calculator(QWidget):
     def __init__(self):
         super().__init__()
+        # 계산을 위한 상태 변수들
+        self.first_num = None
+        self.operator = None
+        self.wait_for_next_num = False
         self.initUI()
 
     def initUI(self):
@@ -58,11 +62,11 @@ class Calculator(QWidget):
             
             # 버튼 스타일링 (기본 숫자 버튼과 우측 연산자 버튼 색상 구분)
             if text in ['÷', '×', '-', '+', '=']:
-                button.setStyleSheet("font-size: 24px; background-color: #f99f00; color: white; border-radius: 10px;")
+                button.setStyleSheet("font-size: 24px; background-color: #f99f00; color: white; border-radius: 30px;")
             elif text in ['AC', '+/-', '%']:
-                button.setStyleSheet("font-size: 20px; background-color: #a5a5a5; color: black; border-radius: 10px;")
+                button.setStyleSheet("font-size: 20px; background-color: #a5a5a5; color: black; border-radius: 30px;")
             else:
-                button.setStyleSheet("font-size: 28px; background-color: #333333; color: white; border-radius: 10px;")
+                button.setStyleSheet("font-size: 28px; background-color: #333333; color: white; border-radius: 30px;")
 
             # 버튼 클릭 이벤트 연결
             button.clicked.connect(self.button_clicked)
@@ -78,23 +82,66 @@ class Calculator(QWidget):
 
     # 3. 이벤트 처리 (버튼을 누를 때마다 숫자가 입력되는 기능)
     def button_clicked(self):
-        # self.sender()를 통해 어떤 버튼이 눌렸는지 확인
         button = self.sender()
-        clicked_value = button.text()
-        current_display = self.display.text()
+        key = button.text()
+        current_text = self.display.text()
 
-        # AC 버튼을 누르면 초기화
-        if clicked_value == 'AC':
+        # 숫자 버튼 처리
+        if key.isdigit() or key == '.':
+            if self.wait_for_next_num:
+                self.display.setText(key)
+                self.wait_for_next_num = False
+            else:
+                if key == '.' and '.' in current_text:
+                    return
+                if current_text == '0' and key != '.':
+                    self.display.setText(key)
+                else:
+                    self.display.setText(current_text + key)
+
+        # 초기화 버튼
+        elif key == 'AC':
             self.display.setText('0')
-            
-        # 처음 '0'이 있는 상태에서 숫자를 누르면 '0'을 지우고 해당 숫자로 대체
-        elif current_display == '0' and clicked_value not in ['÷', '×', '-', '+', '=', '.', '%', '+/-']:
-            self.display.setText(clicked_value)
-            
-        # 그 외의 버튼을 누르면 문자열을 계속 이어붙임 (실제 계산 로직은 이번 과제 제외)
-        else:
-            # 이퀄(=) 기호 등을 눌러도 이번 과제에서는 문자가 그대로 이어붙도록 처리
-            self.display.setText(current_display + clicked_value)
+            self.first_num = None
+            self.operator = None
+            self.wait_for_next_num = False
+
+        # 부호 변경
+        elif key == '+/-':
+            val = float(current_text)
+            self.display.setText(str(int(-val) if val.is_integer() else -val))
+
+        # 퍼센트
+        elif key == '%':
+            val = float(current_text) / 100
+            self.display.setText(str(val))
+
+        # 연산자 버튼 (+, -, ×, ÷)
+        elif key in ['+', '-', '×', '÷']:
+            self.first_num = float(current_text)
+            self.operator = key
+            self.wait_for_next_num = True
+
+        # 결과 버튼 (=)
+        elif key == '=':
+            if self.first_num is not None and self.operator is not None:
+                second_num = float(current_text)
+                if self.operator == '+':
+                    result = self.first_num + second_num
+                elif self.operator == '-':
+                    result = self.first_num - second_num
+                elif self.operator == '×':
+                    result = self.first_num * second_num
+                elif self.operator == '÷':
+                    if second_num == 0:
+                        self.display.setText('Error')
+                        return
+                    result = self.first_num / second_num
+                
+                # 결과값이 정수면 .0 제거
+                self.display.setText(str(int(result) if result.is_integer() else round(result, 8)))
+                self.first_num = None
+                self.operator = None
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)
