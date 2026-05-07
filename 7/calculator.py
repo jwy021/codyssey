@@ -97,14 +97,14 @@ class Calculator(QWidget):
         elif key == '=': self.equal()
 
     # --------------------------------------------------------
-    # [로직 개선] 숫자 입력 제어
+    # 숫자 입력 제어
     # --------------------------------------------------------
     def input_number(self, num_str):
         if self.wait_for_next_num:
             self.display.setText(num_str)
             self.wait_for_next_num = False
             
-            # [추가됨] '=' 버튼 이후 결과값이 있는 상태에서 연산자 대신 새 숫자를 누르면,
+            # '=' 버튼 이후 결과값이 있는 상태에서 연산자 대신 새 숫자를 누르면,
             # 이전 수식 기록을 완전히 지우고 아예 새로운 계산을 시작하도록 처리
             if self.first_num is None:
                 self.history_display.setText("")
@@ -123,12 +123,12 @@ class Calculator(QWidget):
             self.display.setText(self.display.text() + '.')
 
     # --------------------------------------------------------
-    # [로직 개선] 연산자 상태 머신(State Machine) 완벽 제어
+    # 연산자 상태 머신(State Machine) 완벽 제어
     # --------------------------------------------------------
     def set_operator(self, op):
         current_val_str = self.display.text()
 
-        # 1. 방금 '='을 눌러서 결과가 나온 상태에서 연산자를 누른 경우 (가장 원하시던 기능!)
+        # 방금 '='을 눌러서 결과가 나온 상태에서 연산자를 누른 경우
         if self.wait_for_next_num and self.first_num is None:
             self.first_num = float(current_val_str)
             self.operator = op
@@ -136,7 +136,7 @@ class Calculator(QWidget):
             self.history_display.setText(self.formula)
             return
 
-        # 2. 연산자를 누른 직후 다른 연산자로 마음이 바뀐 경우 (예: + 누르고 바로 -)
+        # 연산자를 누른 직후 다른 연산자로 마음이 바뀐 경우 (예: + 누르고 바로 -)
         if self.wait_for_next_num and self.first_num is not None:
             self.operator = op
             if self.formula:
@@ -147,7 +147,7 @@ class Calculator(QWidget):
             self.history_display.setText(self.formula)
             return
 
-        # 3. 일반적인 연속 연산 처리 (예: 1 + 2 + ...)
+        # 일반적인 연속 연산 처리 (예: 1 + 2 + ...)
         if self.first_num is not None and self.operator is not None:
             second_num = float(current_val_str)
             result = self.calculate(self.first_num, second_num, self.operator)
@@ -160,7 +160,7 @@ class Calculator(QWidget):
             self.display.setText(self.format_result(result))
             self.first_num = result
         else:
-            # 4. 아무것도 없는 0 상태에서 첫 숫자를 넣고 연산 시작
+            # 아무것도 없는 0 상태에서 첫 숫자를 넣고 연산 시작
             self.first_num = float(current_val_str)
             self.formula = f"{self.format_result(self.first_num)} {op} "
 
