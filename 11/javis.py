@@ -1,8 +1,13 @@
 # javis.py
+import csv
 import os
+import msvcrt
 import sounddevice as sd
 import soundfile as sf
+import speech_recognition as sr
+import struct
 import sys
+import wave
 from datetime import datetime
 
 # ========================================================
@@ -17,7 +22,7 @@ def record_audio(duration = 5, sample_rate = 44100):
             os.makedirs(save_dir)
             print(f"[시스템] 음성 저장용 '{save_dir}' 폴더가 생성되었습니다.")
         except Exception as e:
-            print(f"[오류] 폴더 생성에 실패했습니다: {e}")
+            print(f'[오류] 폴더 생성에 실패했습니다: {e}')
             return
 
     now = datetime.now()
@@ -26,7 +31,7 @@ def record_audio(duration = 5, sample_rate = 44100):
 
     print('\n' + '=' * 50)
     print('[녹음 시스템] 마이크가 활성화되었습니다.')
-    print(f"시작 - 지금부터 {duration}초 동안 음성을 녹음합니다. 말씀해 주세요...")
+    print(f'시작 - 지금부터 {duration}초 동안 음성을 녹음합니다. 말씀해 주세요...')
     print('=' * 50)
     sys.stdout.flush()
     
@@ -38,11 +43,11 @@ def record_audio(duration = 5, sample_rate = 44100):
         sf.write(filepath, recording, sample_rate)
         
         print('[성공] 음성 파일이 성공적으로 저장되었습니다.')
-        print(f"저장 경로: {filepath}")
+        print(f'저장 경로: {filepath}')
         print('=' * 50)
         
     except Exception as e:
-        print(f"\n[오류] 녹음 중 문제가 발생했습니다. 마이크 연결을 확인해 주세요.\n상세 에러: {e}")
+        print(f'\n[오류] 녹음 중 문제가 발생했습니다. 마이크 연결을 확인해 주세요.\n상세 에러: {e}')
 
 # ========================================================
 # [2] 전체 녹음 파일 목록 출력 기능
@@ -77,14 +82,14 @@ def show_all_records():
                 
         if found_files:
             found_files.sort() # 이름순(시간순) 정렬
-            print(f"[안내] 총 {len(found_files)}개의 파일이 저장되어 있습니다:\n")
+            print(f'[안내] 총 {len(found_files)}개의 파일이 저장되어 있습니다:\n')
             for idx, (name, size) in enumerate(found_files, 1):
-                print(f" [{idx}] {name} ({size:.1f} KB)")
+                print(f' [{idx}] {name} ({size:.1f} KB)')
         else:
             print('[안내] 폴더는 존재하지만 저장된 녹음(.wav) 파일이 없습니다.')
             
     except Exception as e:
-        print(f"[오류] 파일 시스템을 읽어오는 중 예상치 못한 에러가 발생했습니다: {e}")
+        print(f'[오류] 파일 시스템을 읽어오는 중 예상치 못한 에러가 발생했습니다: {e}')
         
     print('=' * 50)
 
@@ -97,7 +102,7 @@ def show_records_by_date(start_date_str, end_date_str):
     
     print('\n' + '=' * 50)
     print('[검색 시스템] 범위 내의 녹음 파일을 탐색합니다.')
-    print(f"검색 범위: {start_date_str} ~ {end_date_str}")
+    print(f'검색 범위: {start_date_str} ~ {end_date_str}')
     print('=' * 50)
     sys.stdout.flush()
     
@@ -134,14 +139,14 @@ def show_records_by_date(start_date_str, end_date_str):
 
         if found_files:
             found_files.sort()
-            print(f"[일치 항목 발견] 총 {len(found_files)}개의 파일이 조건에 부합합니다:\n")
+            print(f'[일치 항목 발견] 총 {len(found_files)}개의 파일이 조건에 부합합니다:\n')
             for idx, (name, size) in enumerate(found_files, 1):
-                print(f" [{idx}] {name} ({size:.1f} KB)")
+                print(f' [{idx}] {name} ({size:.1f} KB)')
         else:
             print('[안내] 지정된 범위 내에 일치하는 녹음 파일이 존재하지 않습니다.')
             
     except Exception as e:
-        print(f"[오류] 파일 시스템을 읽어오는 중 예상치 못한 에러가 발생했습니다: {e}")
+        print(f'[오류] 파일 시스템을 읽어오는 중 예상치 못한 에러가 발생했습니다: {e}')
         
     print('=' * 50)
     return found_files
@@ -155,9 +160,6 @@ def convert_audio_to_text():
     결과를 csv_results 폴더에 같은 이름의 .CSV 파일로 분리하여 저장합니다.
     이미 변환된 결과 파일이 있는 경우 변환 작업을 건너뜁니다.
     '''
-    import speech_recognition as sr
-    import wave
-
     current_dir = os.path.dirname(os.path.abspath(__file__))
     save_dir = os.path.join(current_dir, 'records')
     csv_dir = os.path.join(current_dir, 'csv_results')
@@ -178,7 +180,7 @@ def convert_audio_to_text():
             os.makedirs(csv_dir)
             print(f"[시스템] CSV 저장용 '{csv_dir}' 폴더가 생성되었습니다.")
         except Exception as e:
-            print(f"[오류] 폴더 생성에 실패했습니다: {e}")
+            print(f'[오류] 폴더 생성에 실패했습니다: {e}')
             print('=' * 50)
             return
 
@@ -202,22 +204,54 @@ def convert_audio_to_text():
 
             # 이미 변환이 완료된 파일인지 검증 (건너뛰기 로직)
             if os.path.exists(csv_path):
-                print(f"건너뛰기: {wav_name} (이미 변환된 CSV 결과가 존재합니다)")
+                print(f'건너뛰기: {wav_name} (이미 변환된 CSV 결과가 존재합니다)')
                 skip_count = skip_count + 1
                 continue
 
-            print(f"분석 중: {wav_name}")
+            print(f'분석 중: {wav_name}')
             sys.stdout.flush()
 
-            # 음성 파일 총 재생 시간 계산 (wave 모듈 사용)
+            # 음성 파일 총 재생 시간 및 실제 발화 시작 시점 계산 (wave 및 struct 모듈 사용)
             duration_sec = 0.0
+            start_time_sec = 0.0
             try:
                 with wave.open(wav_path, 'rb') as wave_file:
+                    num_channels = wave_file.getnchannels()
+                    sample_width = wave_file.getsampwidth()
+                    sample_rate = wave_file.getframerate()
                     frames = wave_file.getnframes()
-                    rate = wave_file.getframerate()
-                    duration_sec = frames / float(rate)
+                    duration_sec = frames / float(sample_rate)
+
+                    # 16-bit PCM 포맷인 경우에만 정밀 진폭 분석 수행
+                    if sample_width == 2:
+                        raw_data = wave_file.readframes(frames)
+                        num_samples = frames * num_channels
+                        fmt = f'{num_samples}h'
+                        samples = struct.unpack(fmt, raw_data)
+
+                        # 0.1초(100ms) 단위 청크로 분할하여 노이즈 임계값을 초과하는 최초 시점 스캔
+                        chunk_size = int(sample_rate * 0.1)
+                        threshold = 1000  # 음성 감지 임계값
+
+                        for chunk_idx in range(0, frames, chunk_size):
+                            start_frame = chunk_idx
+                            end_frame = min(chunk_idx + chunk_size, frames)
+
+                            max_val = 0
+                            for f_idx in range(start_frame, end_frame):
+                                sample_idx = f_idx * num_channels
+                                if sample_idx < len(samples):
+                                    val = abs(samples[sample_idx])
+                                    if val > max_val:
+                                        max_val = val
+
+                            # 잡음 차단 레벨을 초과한 경우 최초 발화 시점으로 판정
+                            if max_val > threshold:
+                                start_time_sec = start_frame / float(sample_rate)
+                                start_time_sec = round(start_time_sec, 1)
+                                break
             except Exception as e:
-                print(f"  [경고] 음성 파일 재생 시간 계산 실패: {e}")
+                print(f'  [경고] 음성 파일 재생 시간 및 발화 시작 시간 분석 실패: {e}')
 
             # STT 변환 진행
             recognized_text = ''
@@ -227,16 +261,16 @@ def convert_audio_to_text():
                 
                 # Google Web Speech API로 한국어 인식 수행
                 recognized_text = recognizer.recognize_google(audio_data, language = 'ko-KR')
-                print(f"  [인식 완료] {recognized_text}")
+                print(f'  [인식 완료] {recognized_text}')
             except sr.UnknownValueError:
                 recognized_text = '(인식 실패: 음성을 이해할 수 없음)'
                 print('  [안내] 음성을 텍스트로 변환하는 데 실패했습니다. (알 수 없는 발음)')
             except sr.RequestError as e:
-                recognized_text = f"(인식 실패: API 요청 오류 - {e})"
-                print(f"  [오류] STT 서비스 요청 오류: {e}")
+                recognized_text = f'(인식 실패: API 요청 오류 - {e})'
+                print(f'  [오류] STT 서비스 요청 오류: {e}')
             except Exception as e:
-                recognized_text = f"(인식 실패: {e})"
-                print(f"  [오류] 변환 도중 예상치 못한 오류 발생: {e}")
+                recognized_text = f'(인식 실패: {e})'
+                print(f'  [오류] 변환 도중 예상치 못한 오류 발생: {e}')
 
             # CSV 파일로 저장
             try:
@@ -244,20 +278,20 @@ def convert_audio_to_text():
                 with open(csv_path, 'w', encoding = 'utf-8-sig', newline = '') as f:
                     # CSV 형식: 시간,인식된 텍스트
                     f.write('시간,인식된 텍스트\n')
-                    f.write(f"0.0,{recognized_text}\n")
+                    f.write(f'{start_time_sec:.1f},{recognized_text}\n')
                 
-                print(f"  [저장 완료] CSV 저장 경로: {csv_path}")
+                print(f'  [저장 완료] CSV 저장 경로: {csv_path}')
                 success_count = success_count + 1
             except Exception as e:
-                print(f"  [오류] CSV 파일 저장 실패: {e}")
+                print(f'  [오류] CSV 파일 저장 실패: {e}')
 
         total_processed = success_count + skip_count
-        print(f"\n[안내] 총 {len(wav_files)}개 파일 분석 완료:")
-        print(f"  - 신규 변환 완료: {success_count}개")
-        print(f"  - 건너뜀 (이미 존재): {skip_count}개")
+        print(f'\n[안내] 총 {len(wav_files)}개 파일 분석 완료:')
+        print(f'  - 신규 변환 완료: {success_count}개')
+        print(f'  - 건너뜀 (이미 존재): {skip_count}개')
 
     except Exception as e:
-        print(f"[오류] 변환 과정 중 치명적인 에러가 발생했습니다: {e}")
+        print(f'[오류] 변환 과정 중 치명적인 에러가 발생했습니다: {e}')
 
     print('=' * 50)
 
@@ -269,8 +303,6 @@ def search_keyword_in_csv():
     csv_results 폴더에 저장된 모든 .CSV 파일 안에서 사용자가 입력한 특정 키워드를 검색하여
     일치하는 파일 정보와 인식된 텍스트 내용을 출력합니다.
     '''
-    import csv
-
     current_dir = os.path.dirname(os.path.abspath(__file__))
     csv_dir = os.path.join(current_dir, 'csv_results')
 
@@ -321,24 +353,23 @@ def search_keyword_in_csv():
 
                             # 대소문자 구분 없이 키워드 매칭
                             if keyword.lower() in text_content.lower():
-                                print(f" 파일명: {csv_name}")
-                                print(f" 시간: {time_info}초")
-                                print(f" 내용: {text_content}")
+                                print(f' 파일명: {csv_name}')
+                                print(f' 시간: {time_info}초')
+                                print(f' 내용: {text_content}')
                                 print('-' * 40)
                                 found_count = found_count + 1
             except Exception as e:
-                print(f" [오류] {csv_name} 파일을 읽는 중 에러 발생: {e}")
+                print(f' [오류] {csv_name} 파일을 읽는 중 에러 발생: {e}')
 
         if found_count > 0:
-            print(f"[검색 완료] 총 {found_count}개의 일치하는 항목을 발견했습니다.")
+            print(f'[검색 완료] 총 {found_count}개의 일치하는 항목을 발견했습니다.')
         else:
             print(f"[안내] 키워드 '{keyword}'가 포함된 기록을 찾지 못했습니다.")
 
     except Exception as e:
-        print(f"[오류] 검색 과정 중 예상치 못한 에러가 발생했습니다: {e}")
+        print(f'[오류] 검색 과정 중 예상치 못한 에러가 발생했습니다: {e}')
 
     print('=' * 50)
-
 
 # ========================================================
 # [6] 메인 메뉴 뒤로가기 대기 제어 기능 (신규 추가)
@@ -348,8 +379,6 @@ def wait_for_back():
     사용자가 Enter 또는 ESC 키를 누를 때까지 화면을 대기시킵니다.
     입력이 완료되면 메인 메뉴로 돌아갑니다.
     '''
-    import msvcrt
-
     print('\n' + '-' * 40)
     print('[안내] 메인 메뉴로 돌아가려면 Enter 또는 ESC 키를 누르세요...')
     sys.stdout.flush()
@@ -360,7 +389,6 @@ def wait_for_back():
             # ESC 키 (b'\x1b') 또는 Enter 키 (b'\r' 또는 b'\n') 감지
             if key in (b'\x1b', b'\r', b'\n'):
                 break
-
 
 # ========================================================
 # 메인 실행부 (인터랙티브 메뉴 무한 루프 구현)
