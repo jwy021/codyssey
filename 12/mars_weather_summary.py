@@ -1,9 +1,3 @@
-# -*- coding: utf-8 -*-
-'''
-화성 날씨 데이터 CSV 파일을 읽어 MySQL 데이터베이스에 적재하고 요약하는 스크립트입니다.
-이 코드는 MySQLHelper 클래스를 포함하여 PEP 8 스타일 가이드를 준수하여 작성되었습니다.
-'''
-
 import csv
 import os
 import pymysql
